@@ -4,7 +4,7 @@
 
 	<groupId>org.learning.spring</groupId>
 	<artifactId>guru-spring-pet-clinic</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<modules>
@@ -51,7 +51,7 @@
 
 	<scm>
 		<developerConnection>scm:git:git@github.com:morenosh/guru_spring_pet_clinic.git</developerConnection>
-	  <tag>guru-spring-pet-clinic-0.0.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 </project>
