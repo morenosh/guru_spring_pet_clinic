@@ -37,6 +37,8 @@ public class DataInitializer implements CommandLineRunner {
         vetService.save(vet1);
         vetService.save(vet2);
 
+        System.out.println("owners size = " + ownerService.findAll().size());
+        System.out.println("vets size = " + vetService.findAll().size());
         System.out.println("Loaded Vets.....");
     }
 }
