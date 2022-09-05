@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--suppress ALL -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -6,5 +7,22 @@
 </head>
 <body>
     <h1 th:text="'List Of Owners'">Owner List</h1>
+    <table>
+        <thead>
+        <tr>
+            <td th:text="'Id'"/>
+            <td th:text="'First Name'"/>
+            <td th:text="'Last Name'"/>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="owners" type="org.learning.spring.guruspringpetclinic.model.Owner"*/-->
+        <tr th:each="owner : ${owners}" >
+            <td th:text="${owner.id}"/>
+            <td th:text="${owner.firstName}"/>
+            <td th:text="${owner.lastName}"/>
+        </tr>
+        </tbody>
+    </table>
 </body>
 </html>
