@@ -11,4 +11,10 @@ public class IndexController {
     public String listPets(Model model){
         return "index.html";
     }
+
+    @RequestMapping({"/oups"})
+    public String oups(Model model){
+        return "notimplemented.html";
+    }
+
 }
