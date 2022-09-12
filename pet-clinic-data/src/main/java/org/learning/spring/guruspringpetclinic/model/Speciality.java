@@ -1,13 +1,13 @@
 package org.learning.spring.guruspringpetclinic.model;
 
-public class Speciality extends Person {
-    private String name;
+public class Speciality extends BaseEntity {
+    private String description;
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
