@@ -47,6 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         owner1.setAddress("Akbari blvd, no 2");
         owner1.setTelephone("+18736465884");
         var owner1Pet = new Pet();
+        owner1Pet.setName("Kopol");
         owner1Pet.setBirthDate(LocalDate.of(2000, 2, 10));
         owner1Pet.setType(petTypeCat);
         owner1Pet.setOwner(owner1);
@@ -58,6 +59,7 @@ public class DataInitializer implements CommandLineRunner {
         owner2.setAddress("Teimoori blvd, no 5");
         owner2.setTelephone("+1234567890");
         var owner2Pet = new Pet();
+        owner2Pet.setName("Topol");
         owner2Pet.setBirthDate(LocalDate.of(2000, 2, 10));
         owner2Pet.setType(petTypeDog);
         owner2Pet.setOwner(owner2);
