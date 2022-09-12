@@ -1,8 +1,10 @@
 package org.learning.spring.guruspringpetclinic.bootstrap;
 
 import org.learning.spring.guruspringpetclinic.model.Owner;
+import org.learning.spring.guruspringpetclinic.model.PetType;
 import org.learning.spring.guruspringpetclinic.model.Vet;
 import org.learning.spring.guruspringpetclinic.services.OwnerService;
+import org.learning.spring.guruspringpetclinic.services.PetTypeService;
 import org.learning.spring.guruspringpetclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,14 +13,23 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
+    private final PetTypeService petTypeService;
 
-    public DataInitializer(OwnerService ownerService, VetService vetService) {
+    public DataInitializer(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.petTypeService = petTypeService;
     }
 
     @Override
     public void run(String... args) {
+        var petTypeDog = new PetType();
+        petTypeDog.setName("Dog");
+        petTypeDog = petTypeService.save(petTypeDog);
+        var petTypeCat = new PetType();
+        petTypeCat.setName("Cat");
+        petTypeCat = petTypeService.save(petTypeCat);
+
         var owner1 = new Owner();
         owner1.setFirstName("Salimeh");
         owner1.setLastName("Salimi");
@@ -39,6 +50,7 @@ public class DataInitializer implements CommandLineRunner {
 
         System.out.println("owners size = " + ownerService.findAll().size());
         System.out.println("vets size = " + vetService.findAll().size());
+        System.out.println("pet type size = " + petTypeService.findAll().size());
         System.out.println("Loaded Vets.....");
     }
 }
