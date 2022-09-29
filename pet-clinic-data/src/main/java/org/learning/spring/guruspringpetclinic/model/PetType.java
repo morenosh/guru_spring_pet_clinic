@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "pet_types")
-public class PetType extends BaseEntity{
+public class PetType extends BaseEntity<Short>{
     @Column(name = "name")
     private String name;
 

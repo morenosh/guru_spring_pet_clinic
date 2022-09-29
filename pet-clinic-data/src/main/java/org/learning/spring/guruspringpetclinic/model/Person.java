@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class Person extends BaseEntity {
+public class Person extends BaseEntity<Long> {
 
     @Column(name = "first_name")
     private String firstName;
