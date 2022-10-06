@@ -13,16 +13,18 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
+    private final VisitService visitService;
     private final PetTypeService petTypeService;
     private final PetService petService;
     private final SpecialtyService specialtyService;
 
     public DataInitializer(
             OwnerService ownerService, VetService vetService,
-            PetTypeService petTypeService, PetService petService,
+            VisitService visitService, PetTypeService petTypeService, PetService petService,
             SpecialtyService specialtyService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.visitService = visitService;
         this.petTypeService = petTypeService;
         this.petService = petService;
         this.specialtyService = specialtyService;
@@ -95,10 +97,17 @@ public class DataInitializer implements CommandLineRunner {
         vetService.save(vet1);
         vetService.save(vet2);
 
+        Visit catVisit = new Visit();
+        catVisit.setPet(owner2Pet);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("sensitive cat");
+        visitService.save(catVisit);
+
         System.out.println("owners size = " + ownerService.findAll().size());
         System.out.println("vets size = " + vetService.findAll().size());
         System.out.println("pet_type size = " + petTypeService.findAll().size());
         System.out.println("pet size = " + petService.findAll().size());
+        System.out.println("visit size = " + visitService.findAll().size());
 
         var specialties = specialtyService.findAll();
         System.out.println("specialty size = " + specialties.size());
