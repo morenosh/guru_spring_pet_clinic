@@ -1,13 +1,16 @@
 package org.learning.spring.guruspringpetclinic.services.springdatajpa;
 
 import org.learning.spring.guruspringpetclinic.model.Speciality;
-import org.learning.spring.guruspringpetclinic.model.Vet;
 import org.learning.spring.guruspringpetclinic.repositories.SpecialityRepository;
 import org.learning.spring.guruspringpetclinic.services.SpecialtyService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.util.Streamable;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
+@Profile("springdatajpa")
 public class SpecialityServiceJpa implements SpecialtyService {
 
     private final SpecialityRepository specialityRepository;
@@ -22,7 +25,7 @@ public class SpecialityServiceJpa implements SpecialtyService {
     }
 
     @Override
-    public Speciality findById(Long id) {
+    public Speciality findById(Integer id) {
         return specialityRepository.findById(id).orElse(null);
     }
 
@@ -41,7 +44,7 @@ public class SpecialityServiceJpa implements SpecialtyService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         specialityRepository.deleteById(id);
     }
 }

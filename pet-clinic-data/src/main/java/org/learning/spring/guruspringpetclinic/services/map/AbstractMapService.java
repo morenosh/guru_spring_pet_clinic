@@ -5,8 +5,8 @@ import org.learning.spring.guruspringpetclinic.services.CrudService;
 
 import java.util.*;
 
-public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> implements CrudService<T, ID> {
-    protected Map<Long, T> map = new HashMap<>();
+public abstract class AbstractMapService<T extends BaseEntity<ID>, ID extends Number> implements CrudService<T, ID> {
+    protected Map<ID, T> map = new HashMap<>();
 
     public Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -28,13 +28,15 @@ public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> 
         if (object == null) throw new RuntimeException("object cannot be null!");
 
         if (object.getId() == null)
-            object.setId(getNextId());
-        map.put((Long)object.getId(), object);
+            //noinspection unchecked
+            object.setId((ID) getNextId());
+        map.put(object.getId(), object);
         return object;
     }
 
     private Long getNextId() {
         if (map.keySet().isEmpty()) return 1L;
-        return (Collections.max(map.keySet()) + 1);
+        var maxValue = map.keySet().stream().max(Comparator.comparing(c -> ((Long) c))).get();
+        return (maxValue.longValue() + 1);
     }
 }

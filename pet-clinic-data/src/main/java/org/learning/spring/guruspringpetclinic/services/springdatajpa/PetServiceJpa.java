@@ -1,15 +1,16 @@
 package org.learning.spring.guruspringpetclinic.services.springdatajpa;
 
 import org.learning.spring.guruspringpetclinic.model.Pet;
-import org.learning.spring.guruspringpetclinic.model.Vet;
 import org.learning.spring.guruspringpetclinic.repositories.PetRepository;
 import org.learning.spring.guruspringpetclinic.services.PetService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile("springdatajpa")
 public class PetServiceJpa implements PetService {
 
     private final PetRepository petRepository;

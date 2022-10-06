@@ -3,12 +3,14 @@ package org.learning.spring.guruspringpetclinic.services.springdatajpa;
 import org.learning.spring.guruspringpetclinic.model.Vet;
 import org.learning.spring.guruspringpetclinic.repositories.VetRepository;
 import org.learning.spring.guruspringpetclinic.services.VetService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile("springdatajpa")
 public class VetServiceJpa implements VetService {
 
     private final VetRepository vetRepository;

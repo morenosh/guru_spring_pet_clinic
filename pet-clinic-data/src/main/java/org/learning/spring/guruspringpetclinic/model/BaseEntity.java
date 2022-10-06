@@ -7,17 +7,17 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-public class BaseEntity<T extends Number> implements Serializable {
+public class BaseEntity<ID extends Number> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    T id;
+    ID id;
 
-    public T getId() {
+    public ID getId() {
         return id;
     }
 
-    public void setId(T id) {
+    public void setId(ID id) {
         this.id = id;
     }
 }

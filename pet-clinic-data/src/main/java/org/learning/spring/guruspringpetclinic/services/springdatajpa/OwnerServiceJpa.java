@@ -3,12 +3,14 @@ package org.learning.spring.guruspringpetclinic.services.springdatajpa;
 import org.learning.spring.guruspringpetclinic.model.Owner;
 import org.learning.spring.guruspringpetclinic.repositories.OwnerRepository;
 import org.learning.spring.guruspringpetclinic.services.OwnerService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile("springdatajpa")
 public class OwnerServiceJpa implements OwnerService {
 
     private final OwnerRepository ownerRepository;
