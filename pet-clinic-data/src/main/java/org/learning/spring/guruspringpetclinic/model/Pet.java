@@ -1,6 +1,7 @@
 package org.learning.spring.guruspringpetclinic.model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Columns;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "pets")
 public class Pet extends BaseEntity<Long> {
