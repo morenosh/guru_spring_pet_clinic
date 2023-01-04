@@ -28,7 +28,7 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
     public Owner save(Owner owner) {
         if (owner == null) throw new RuntimeException("owner can not be null.");
 
-        owner.getPet().forEach(pet -> {
+        owner.getPets().forEach(pet -> {
             if (pet != null){
                 if (pet.getId() == null)
                     petService.save(pet);

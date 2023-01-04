@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
         owner1Pet.setBirthDate(LocalDate.of(2000, 2, 10));
         owner1Pet.setType(petTypeCat);
         owner1Pet.setOwner(owner1);
-        owner1.setPet(new HashSet<>(List.of(owner1Pet)));
+        owner1.setPets(new HashSet<>(List.of(owner1Pet)));
 
         var owner2 = new Owner();
         owner2.setFirstName("foo");
@@ -70,7 +70,7 @@ public class DataInitializer implements CommandLineRunner {
         owner2Pet.setBirthDate(LocalDate.of(2000, 2, 10));
         owner2Pet.setType(petTypeDog);
         owner2Pet.setOwner(owner2);
-        owner2.setPet(new HashSet<>(List.of(owner2Pet)));
+        owner2.setPets(new HashSet<>(List.of(owner2Pet)));
 
         ownerService.save(owner1);
         ownerService.save(owner2);

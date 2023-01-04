@@ -25,5 +25,5 @@ public class Owner extends Person {
     private String telephone;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @Builder.Default
-    private Set<Pet> pet = new HashSet<>();
+    private Set<Pet> pets = new HashSet<>();
 }
