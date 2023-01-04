@@ -45,8 +45,8 @@ public class DataInitializer implements CommandLineRunner {
         petTypeCat = petTypeService.save(petTypeCat);
 
         var owner1 = new Owner();
-        owner1.setFirstName("Salimeh");
-        owner1.setLastName("Salimi");
+        owner1.setFirstName("moo");
+        owner1.setLastName("mooi");
         owner1.setCity("Chad");
         owner1.setAddress("Akbari blvd, no 2");
         owner1.setTelephone("+18736465884");
@@ -59,8 +59,8 @@ public class DataInitializer implements CommandLineRunner {
         owner1.setPet(new HashSet<>(List.of(owner1Pet)));
 
         var owner2 = new Owner();
-        owner2.setFirstName("Salem");
-        owner2.setLastName("Salimi");
+        owner2.setFirstName("foo");
+        owner2.setLastName("fooi");
         owner2.setCity("Yasooj");
         owner2.setAddress("Teimoori blvd, no 5");
         owner2.setTelephone("+1234567890");
