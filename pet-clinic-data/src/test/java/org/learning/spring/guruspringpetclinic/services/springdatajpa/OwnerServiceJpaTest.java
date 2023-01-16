@@ -1,5 +1,6 @@
 package org.learning.spring.guruspringpetclinic.services.springdatajpa;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,12 +31,16 @@ class OwnerServiceJpaTest {
 
     Owner sampleOwner1;
     Owner sampleOwner2;
+    String commonLastNamePart;
 
     @BeforeEach
     void setUp() {
-        sampleOwner1 = Owner.builder().address("address1").city("city1").telephone("phone1").firstName("firstName1").lastName("lastName1").build();
+        commonLastNamePart = "lastName";
+        sampleOwner1 =
+                Owner.builder().address("address1").city("city1").telephone("phone1").firstName("firstName1").lastName(commonLastNamePart + 1).build();
         ReflectionTestUtils.setField(sampleOwner1, "id", 1L);
-        sampleOwner2 = Owner.builder().address("address2").city("city2").telephone("phone2").firstName("firstName2").lastName("lastName2").build();
+        sampleOwner2 =
+                Owner.builder().address("address2").city("city2").telephone("phone2").firstName("firstName2").lastName(commonLastNamePart + 2).build();
         ReflectionTestUtils.setField(sampleOwner2, "id", 2L);
     }
 
@@ -44,7 +50,8 @@ class OwnerServiceJpaTest {
         var all = ownerServiceJpa.findAll();
         Mockito.verify(ownerRepository, Mockito.times(1)).findAll();
         assertEquals(all.size(), 2);
-        var firstNameArray = all.stream().sorted(Comparator.comparing(Person::getFirstName)).map(Person::getFirstName).toArray(String[]::new);
+        var firstNameArray =
+                all.stream().sorted(Comparator.comparing(Person::getFirstName)).map(Person::getFirstName).toArray(String[]::new);
         assertArrayEquals(firstNameArray, new String[]{"firstName1", "firstName2"});
     }
 
@@ -83,14 +90,14 @@ class OwnerServiceJpaTest {
 
     @Test
     void deleteNull() {
-        var e = assertThrows(RuntimeException.class, ()->ownerServiceJpa.delete(null));
+        var e = assertThrows(RuntimeException.class, () -> ownerServiceJpa.delete(null));
         assertEquals(e.getMessage(), "argument can not be null");
     }
 
     @Test
     void deleteIdNull() {
         ReflectionTestUtils.setField(sampleOwner1, "id", null);
-        var e = assertThrows(RuntimeException.class, ()->ownerServiceJpa.delete(sampleOwner1));
+        var e = assertThrows(RuntimeException.class, () -> ownerServiceJpa.delete(sampleOwner1));
         assertEquals(e.getMessage(), "id of entity to be deleted can not be null");
     }
 
@@ -108,9 +115,69 @@ class OwnerServiceJpaTest {
 
     @Test
     void findByLastName() {
+        //given
         Mockito.when(ownerRepository.findByLastName(sampleOwner1.getLastName())).thenReturn(Optional.of(sampleOwner1));
+
+        //when
         var o = ownerServiceJpa.findByLastName(sampleOwner1.getLastName());
+
+        //then
         assertEquals(o.getLastName(), sampleOwner1.getLastName());
         Mockito.verify(ownerRepository, Mockito.times(1)).findByLastName(sampleOwner1.getLastName());
+    }
+
+    @Test
+    void findByLastNameNoResult() {
+        //given
+        var lastName = "alaki";
+        Mockito.when(ownerRepository.findByLastName(Mockito.any())).thenReturn(Optional.empty());
+
+        //when
+        var owner = ownerServiceJpa.findByLastName(lastName);
+
+        //then
+        Assertions.assertNull(owner);
+    }
+
+    @Test
+    void findByLastNameLikeManyResults() {
+        //given
+        var ownerList = List.of(sampleOwner1, sampleOwner2);
+        Mockito.when(ownerRepository.findAllByLastNameContaining(commonLastNamePart)).thenReturn(ownerList);
+
+        //when
+        List<Owner> owners = ownerServiceJpa.findAllByLastNameContaining(commonLastNamePart);
+
+        //then
+        Assertions.assertEquals(ownerList.size(), owners.size());
+        for (var owner : owners) {
+            Assertions.assertTrue(owner.getLastName().contains(commonLastNamePart));
+        }
+    }
+
+    @Test
+    void findByLastNameLikeNoResult() {
+        //given
+        Mockito.when(ownerRepository.findAllByLastNameContaining(Mockito.any())).thenReturn(List.of());
+
+        //when
+        List<Owner> owners = ownerServiceJpa.findAllByLastNameContaining(commonLastNamePart);
+
+        //then
+        Assertions.assertTrue(owners.isEmpty());
+    }
+
+    @Test
+    void findByLastNameLikeOneResult() {
+        //given
+        var ownerList = List.of(sampleOwner1);
+        Mockito.when(ownerRepository.findAllByLastNameContaining(sampleOwner1.getLastName())).thenReturn(ownerList);
+
+        //when
+        List<Owner> owners = ownerServiceJpa.findAllByLastNameContaining(sampleOwner1.getLastName());
+
+        //then
+        Assertions.assertEquals(1, owners.size());
+        Assertions.assertSame(owners.get(0).getLastName(), sampleOwner1.getLastName());
     }
 }

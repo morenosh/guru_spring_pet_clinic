@@ -21,7 +21,7 @@
 	<name>guru_spring_pet_clinic</name>
 	<description>guru_spring_pet_clinic</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<build>

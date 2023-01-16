@@ -6,6 +6,7 @@ import org.hibernate.annotations.Columns;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -30,4 +31,9 @@ public class Pet extends BaseEntity<Long> {
     private LocalDate birthDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
     private Set<Visit> visits;
+
+    @Override
+    public String toString(){
+        return name.concat(" :").concat(type.getName());
+    }
 }

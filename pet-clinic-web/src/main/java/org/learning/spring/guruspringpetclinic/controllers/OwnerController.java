@@ -1,11 +1,12 @@
 package org.learning.spring.guruspringpetclinic.controllers;
 
+import org.learning.spring.guruspringpetclinic.model.Owner;
 import org.learning.spring.guruspringpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("/owners")
@@ -18,15 +19,17 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
-    @GetMapping({"", "/", "/index", "/index.html"})
-    public String listOwners(Model model) {
-        model.addAttribute("owners", ownerService.findAll());
-        return "owners/index.html";
+
+    @InitBinder
+    public void setAllowedField(WebDataBinder wenDataBinder){
+        wenDataBinder.setDisallowedFields("id");
     }
 
-    @GetMapping({"/find"})
-    public String findOwners() {
-        return "notimplemented.html";
+    @RequestMapping({"/find"})
+    public ModelAndView findOwners(Owner owner) {
+        var modelAndView = new ModelAndView("owners/findOwners");
+        modelAndView.addObject(owner);
+        return modelAndView;
     }
 
     @GetMapping("/{ownerId}")
@@ -35,5 +38,29 @@ public class OwnerController {
         var owner = ownerService.findById(ownerId);
         modelAndView.addObject(owner);
         return modelAndView;
+    }
+
+    @GetMapping
+    public ModelAndView processFindForm(Owner owner, BindingResult result) {
+
+        // allow parameterless GET request for /owners to return all records
+        if (owner.getLastName() == null) {
+            owner.setLastName("");
+        }
+
+        var ownersFound = ownerService.findAllByLastNameContaining(owner.getLastName());
+
+        if (ownersFound.isEmpty()) {
+            result.rejectValue("lastName", "not found", "not found");
+            return new ModelAndView("owners/findOwners");
+        } else if (ownersFound.size() == 1) {
+            // 1 owner found
+            owner = ownersFound.get(0);
+            return new ModelAndView("redirect:/owners/" + owner.getId());
+        } else {
+            var modelAndView = new ModelAndView("owners/ownersList");
+            modelAndView.addObject("listOwners", ownersFound);
+            return modelAndView;
+        }
     }
 }
