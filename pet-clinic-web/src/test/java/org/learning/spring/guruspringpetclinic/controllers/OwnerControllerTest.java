@@ -47,7 +47,13 @@ class OwnerControllerTest {
 
     @Test
     void findOwners() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/owners/find"))
+        //given
+
+        //when
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/owners/find"));
+
+        //then
+        resultActions
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("owner"));
@@ -73,7 +79,7 @@ class OwnerControllerTest {
         resultActions
                 .andExpect(MockMvcResultMatchers.view().name("owners/ownersList"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attributeExists("selections"));
+                .andExpect(MockMvcResultMatchers.model().attributeExists("listOwners"));
     }
 
     @Test
@@ -128,6 +134,78 @@ class OwnerControllerTest {
         resultActions
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("owners/ownerDetails"))
+                .andExpect(MockMvcResultMatchers.model().attribute("owner",
+                        Matchers.hasProperty("id", Matchers.is(ownerId))));
+    }
+
+    @Test
+    void initCreateOwner() throws Exception {
+        //given
+        //when
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/owners/new"));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"));
+
+        Mockito.verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void processCreateOwner() throws Exception {
+        //given
+        var ownerId = 1L;
+        var owner = Owner.builder().id(ownerId).build();
+
+        //when
+        Mockito.when(ownerService.save(Mockito.any())).thenReturn(owner);
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/owners/new", owner));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + ownerId))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"));
+
+        Mockito.verify(ownerService, Mockito.times(1)).save(Mockito.any());
+    }
+
+    @Test
+    void initUpdateOwner() throws Exception {
+        //given
+        var ownerId = 1L;
+        var owner = Owner.builder().id(ownerId).build();
+
+        //when
+        Mockito.when(ownerService.findById(ownerId)).thenReturn(owner);
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/owners/" + ownerId + "/edit"));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("owner",
+                        Matchers.hasProperty("id", Matchers.is(ownerId))));
+
+        Mockito.verify(ownerService, Mockito.times(1)).findById(ownerId);
+    }
+
+    @Test
+    void processUpdateOwner() throws Exception {
+        //given
+        var ownerId = 1L;
+        var owner = Owner.builder().id(ownerId).build();
+
+        //when
+        Mockito.when(ownerService.save(Mockito.any())).thenReturn(owner);
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/owners/" + ownerId + "/edit", owner));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + ownerId))
                 .andExpect(MockMvcResultMatchers.model().attribute("owner",
                         Matchers.hasProperty("id", Matchers.is(ownerId))));
     }

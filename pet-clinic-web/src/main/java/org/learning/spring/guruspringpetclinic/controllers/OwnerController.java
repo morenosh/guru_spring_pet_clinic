@@ -5,6 +5,7 @@ import org.learning.spring.guruspringpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,21 +22,21 @@ public class OwnerController {
 
 
     @InitBinder
-    public void setAllowedField(WebDataBinder wenDataBinder){
+    public void setAllowedField(WebDataBinder wenDataBinder) {
         wenDataBinder.setDisallowedFields("id");
     }
 
     @RequestMapping({"/find"})
-    public ModelAndView findOwners(Owner owner) {
+    public ModelAndView findOwners() {
         var modelAndView = new ModelAndView("owners/findOwners");
-        modelAndView.addObject(owner);
+        modelAndView.addObject(Owner.builder().build());
         return modelAndView;
     }
 
     @GetMapping("/{ownerId}")
     public ModelAndView displayOwner(@PathVariable Long ownerId) {
-        var modelAndView = new ModelAndView("owners/ownerDetails");
         var owner = ownerService.findById(ownerId);
+        var modelAndView = new ModelAndView("owners/ownerDetails");
         modelAndView.addObject(owner);
         return modelAndView;
     }
@@ -62,5 +63,41 @@ public class OwnerController {
             modelAndView.addObject("listOwners", ownersFound);
             return modelAndView;
         }
+    }
+
+    @GetMapping("/new")
+    public ModelAndView initCreateOwner(Model model) {
+        var modelAndView = new ModelAndView("owners/createOrUpdateOwnerForm");
+        modelAndView.addObject("owner", Owner.builder().build());
+        return modelAndView;
+    }
+
+    @PostMapping("/new")
+    public ModelAndView processCreateOwner(@Validated Owner owner, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("owners/createOrUpdateOwnerForm");
+        }
+        var savedOwner = ownerService.save(owner);
+        return new ModelAndView("redirect:/owners/" + savedOwner.getId());
+    }
+
+    @GetMapping("/{ownerId}/edit")
+    public ModelAndView initUpdateOwner(@PathVariable Long ownerId, Model model) {
+        var owner = ownerService.findById(ownerId);
+        var modelAndView = new ModelAndView("owners/createOrUpdateOwnerForm");
+        modelAndView.addObject(owner);
+        return modelAndView;
+    }
+
+    @PostMapping("/{ownerId}/edit")
+    public ModelAndView processUpdateOwner(@Validated Owner owner, @PathVariable Long ownerId, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("owners/createOrUpdateOwnerForm");
+        }
+        owner.setId(ownerId);
+        ownerService.save(owner);
+        var modelAndView = new ModelAndView("redirect:/owners/" + ownerId);
+        modelAndView.addObject(owner);
+        return modelAndView;
     }
 }
