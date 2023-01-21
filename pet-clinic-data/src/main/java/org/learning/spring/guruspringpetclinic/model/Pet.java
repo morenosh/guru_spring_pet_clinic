@@ -33,7 +33,9 @@ public class Pet extends BaseEntity<Long> {
     private Set<Visit> visits;
 
     @Override
-    public String toString(){
-        return name.concat(" :").concat(type.getName());
+    public String toString() {
+        var name = (this.name != null) ? this.name : "null";
+        var type = (this.type != null) ? this.type.getName() : "null";
+        return name.concat(" :").concat(type);
     }
 }
