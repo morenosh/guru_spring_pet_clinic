@@ -22,8 +22,8 @@ public class OwnerController {
 
 
     @InitBinder
-    public void setAllowedField(WebDataBinder wenDataBinder) {
-        wenDataBinder.setDisallowedFields("id");
+    public void setAllowedField(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
     }
 
     @RequestMapping({"/find"})
