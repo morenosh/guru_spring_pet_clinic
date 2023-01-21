@@ -1,11 +1,11 @@
 package org.learning.spring.guruspringpetclinic.controllers;
 
+import jakarta.validation.Valid;
 import org.learning.spring.guruspringpetclinic.model.Owner;
 import org.learning.spring.guruspringpetclinic.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -73,7 +73,7 @@ public class OwnerController {
     }
 
     @PostMapping("/new")
-    public ModelAndView processCreateOwner(@Validated Owner owner, BindingResult result) {
+    public ModelAndView processCreateOwner(@Valid Owner owner, BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("owners/createOrUpdateOwnerForm");
         }
@@ -90,7 +90,7 @@ public class OwnerController {
     }
 
     @PostMapping("/{ownerId}/edit")
-    public ModelAndView processUpdateOwner(@Validated Owner owner, @PathVariable Long ownerId, BindingResult result) {
+    public ModelAndView processUpdateOwner(@Valid Owner owner, @PathVariable Long ownerId, BindingResult result) {
         if (result.hasErrors()) {
             return new ModelAndView("owners/createOrUpdateOwnerForm");
         }

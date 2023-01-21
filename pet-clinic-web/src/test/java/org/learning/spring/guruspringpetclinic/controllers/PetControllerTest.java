@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,4 +97,47 @@ class PetControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeHasFieldErrorCode("pet", "name", "duplicate"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    void initUpdatePet() throws Exception {
+        //given
+        var petId = 2L;
+        var pet = Pet.builder().id(petId).name("petName").birthDate(LocalDate.of(1990, 5, 15)).build();
+
+        //when
+        Mockito.when(petService.findById(petId)).thenReturn(pet);
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/owners/" + ownerId + "/pets/" + petId +
+                "/edit"));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.view().name("/pets/createOrUpdatePetForm"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("pet"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(petService, Mockito.times(1)).findById(petId);
+    }
+
+    @Test
+    void processUpdatePetSucceed() throws Exception {
+        //given
+        Long petId = 2L;
+        var petInOwner = Pet.builder().id(petId).name("petName").birthDate(LocalDate.of(1990, 5, 15)).build();
+        var petReturnFromPetService = Pet.builder().id(petId).name("petName").birthDate(LocalDate.of(1990, 5, 15)).build();
+        owner.getPets().add(petInOwner);
+
+        //when
+        Mockito.when(petService.findById(petId)).thenReturn(petReturnFromPetService);
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders
+                .post("/owners/" + ownerId + "/pets/" + petId + "/edit")
+                .param("name", "newPetName")
+                .param("id", petId.toString()));
+
+        //then
+        resultActions
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + owner.getId()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+
+        Mockito.verify(ownerService, Mockito.times(1)).save(owner);
+    }
+
 }

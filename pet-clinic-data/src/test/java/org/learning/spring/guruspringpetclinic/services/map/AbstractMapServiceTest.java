@@ -13,6 +13,7 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 class AbstractMapServiceTest {
 
     AbstractMapService mapService;
@@ -21,10 +22,10 @@ class AbstractMapServiceTest {
     void setUp() {
         mapService = Mockito.mock(AbstractMapService.class, Mockito.CALLS_REAL_METHODS);
         ReflectionTestUtils.setField(mapService, "map", new HashMap<>());
-        addEntity(1);
+        addEntity();
     }
 
-    private void addEntity(int i) {
+    private void addEntity() {
         var sampleEntity = new BaseEntity(1);
         mapService.save(sampleEntity);
     }
@@ -45,7 +46,7 @@ class AbstractMapServiceTest {
     void deleteById() {
         mapService.deleteById(1);
         assertNull(mapService.findById(1));
-        addEntity(1);
+        addEntity();
     }
 
     @Test

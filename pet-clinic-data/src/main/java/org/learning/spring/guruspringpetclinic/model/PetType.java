@@ -1,13 +1,11 @@
 package org.learning.spring.guruspringpetclinic.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
 @Setter
 @NoArgsConstructor

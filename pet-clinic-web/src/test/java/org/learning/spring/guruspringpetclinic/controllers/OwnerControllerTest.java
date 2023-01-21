@@ -96,9 +96,7 @@ class OwnerControllerTest {
         //then
         resultActions
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + owner.getId()))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.model().attribute("owner", Matchers.hasProperty("lastName",
-                        Matchers.is(lastName))));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     @Test
@@ -167,8 +165,7 @@ class OwnerControllerTest {
         //then
         resultActions
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + ownerId))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/" + ownerId));
 
         Mockito.verify(ownerService, Mockito.times(1)).save(Mockito.any());
     }

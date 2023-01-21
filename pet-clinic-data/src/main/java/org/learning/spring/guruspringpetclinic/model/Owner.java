@@ -1,13 +1,12 @@
 package org.learning.spring.guruspringpetclinic.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
 @Setter
 @SuperBuilder

@@ -1,15 +1,11 @@
 package org.learning.spring.guruspringpetclinic.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Columns;
-
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Set;
 
-@SuppressWarnings("JpaDataSourceORMInspection")
 @Getter
 @Setter
 @NoArgsConstructor
