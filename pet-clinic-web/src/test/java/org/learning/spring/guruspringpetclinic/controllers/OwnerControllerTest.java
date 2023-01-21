@@ -156,12 +156,13 @@ class OwnerControllerTest {
     @Test
     void processCreateOwner() throws Exception {
         //given
-        var ownerId = 1L;
+        Long ownerId = 1L;
         var owner = Owner.builder().id(ownerId).build();
 
         //when
         Mockito.when(ownerService.save(Mockito.any())).thenReturn(owner);
-        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/owners/new", owner));
+        var resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/owners/new")
+                .param("id", ownerId.toString()));
 
         //then
         resultActions
